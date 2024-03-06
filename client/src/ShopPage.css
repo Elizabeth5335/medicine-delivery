@@ -1,0 +1,56 @@
+.shops-list {
+  border: 1px solid rgb(61, 61, 61);
+  margin: 1rem;
+  padding: 2rem;
+  border-radius: 26px;
+  width: 20vw;
+  overflow-y: auto;
+  height: calc(100vh - 10rem);
+}
+
+.shops-item {
+  padding: 8px 16px;
+  margin: 1rem auto;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid rgb(61, 61, 61);
+  border-radius: 8px;
+}
+
+.shops-item:hover {
+  background-color: #aaaaaa;
+}
+
+.shops-item.active {
+  background-color: #434343;
+  color: #fff;
+}
+
+.active:hover {
+  background-color: #434343;
+}
+
+.med-list {
+  padding: 2rem;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  /* justify-content: space-between; */
+}
+
+.med-item {
+  margin: 0 3rem;
+}
+
+.med-item-image{
+  width: 150px;
+  object-fit: contain;
+  height: 150px;
+}
+
+.med-item-footer{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+}
