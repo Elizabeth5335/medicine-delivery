@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function MedItem(props) {
-  const { item: { id, name, image, price }, addToCart } = props;
+  const { item: { _id, name, image, price }, addToCart } = props;
     
   return (
     <div className="med-item">

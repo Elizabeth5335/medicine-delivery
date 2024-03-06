@@ -1,33 +1,19 @@
 import { useState } from "react";
 
-const shops = [
-  {
-    id: 1,
-    name: "Shop 1",
-  },
-  {
-    id: 2,
-    name: "Shop 2",
-  },
-  {
-    id: 3,
-    name: "Shop 3",
-  },
-];
 function ShopsList(props) {
-  const { currentShop, toggleCurrentShop } = props;
-
+  const { currentShop, shops, toggleCurrentShop } = props;
+  
   return (
     <div>
       <ul className="shops-list">
         {shops.map((shop) => {
           return (
             <li
-              key={shop.id}
+              key={shop._id}
               className={`shops-item ${
-                currentShop === shop.id ? "active" : ""
+                currentShop === shop._id ? "active" : ""
               }`}
-              onClick={() => toggleCurrentShop(shop.id)}
+              onClick={() => toggleCurrentShop(shop._id)}
             >
               {shop.name}
             </li>
