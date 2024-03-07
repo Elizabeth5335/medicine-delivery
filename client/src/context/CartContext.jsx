@@ -3,7 +3,7 @@ import { createContext, useState, useEffect } from "react";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartProducts, setCartProducts] = useState([]);
+  const [cartProducts, setCartProducts] = useState(JSON.parse(localStorage.getItem("cartProducts")) || []);
 
   function addToCart(product) {
     const isProductInCart = cartProducts.find(
@@ -66,13 +66,6 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
   }, [cartProducts]);
-
-  useEffect(() => {
-    const cartProducts = localStorage.getItem("cartProducts");
-    if (cartProducts) {
-      setCartProducts(JSON.parse(cartProducts));
-    }
-  }, []);
 
   return (
     <CartContext.Provider

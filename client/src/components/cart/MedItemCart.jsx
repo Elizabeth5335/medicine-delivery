@@ -39,6 +39,7 @@ function MedItemCart(props) {
             max={100}
             required
           />
+          
         </label>
         <button className="cart-item-remove" onClick={() => toggleRemove(product)}>X</button>
       </div>

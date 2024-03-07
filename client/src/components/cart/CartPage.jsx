@@ -12,7 +12,7 @@ function CartPage() {
   const [address, setAddress] = useState("");
   const [formErrors, setFormErrors] = useState({});
 
-  const { cartProducts, getCartTotal } = useContext(CartContext);
+  const { cartProducts, getCartTotal, clearCart } = useContext(CartContext);
 
   function validateForm() {
     const errors = {};
@@ -26,7 +26,9 @@ function CartPage() {
     }
     if (!phone.trim()) {
       errors.phone = "Phone number is required";
-    } else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone)) {
+    } else if (
+      !/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone)
+    ) {
       errors.phone = "Phone number is invalid";
     }
     if (!address.trim()) {
@@ -39,21 +41,28 @@ function CartPage() {
   function submitOrder(e) {
     e.preventDefault();
     if (validateForm()) {
-      axios
-        .post("/api/order", {
-          name,
-          email,
-          phone,
-          address,
-          orderProducts: cartProducts,
-        })
-        .then((response) => {
-          console.log("Order submitted successfully:", response.data);
-          window.alert("Order submitted successfully!");
-        })
-        .catch((error) => {
-          console.error("Error submitting order:", error);
+      try {
+        axios({
+          method: "post",
+          url: "/api/order",
+          data: {
+            name,
+            email,
+            phone,
+            address,
+            orderProducts: cartProducts,
+          },
         });
+        clearCart();
+        setName("");
+        setEmail("");
+        setPhone("");
+        setAddress("");
+
+        return alert("Order submitted successfully!");
+      } catch (error) {
+        return alert("Error: " + error);
+      }
     }
   }
 
@@ -123,10 +132,21 @@ function CartPage() {
             )}
           </label>
           <button type="submit">Submit</button>
+          <div className="cart-footer">
+            <h2>Total price: {getCartTotal()}</h2>
+
+            {cartProducts?.length > 0 && (
+              <Link className="button" to="/">
+                Continue shopping
+              </Link>
+            )}
+          </div>
         </form>
 
         {cartProducts?.length > 0 ? (
-          <MedItemCartList />
+          <div>
+            <MedItemCartList />
+          </div>
         ) : (
           <div className="cart-empty-container">
             <h2 className="cart-empty">Cart is empty</h2>
@@ -136,15 +156,6 @@ function CartPage() {
           </div>
         )}
       </div>
-      {cartProducts?.length > 0 && (
-        <div className="cart-footer">
-          <h2>Total price: {getCartTotal()}</h2>
-
-          <Link className="button" to="/">
-            Continue shopping
-          </Link>
-        </div>
-      )}
     </div>
   );
 }

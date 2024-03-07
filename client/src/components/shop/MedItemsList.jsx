@@ -7,46 +7,51 @@ function MedItemsList(props) {
 
   const { addToCart } = useContext(CartContext);
 
-  const products = shops?.find((shop) => shop?._id === currentShop)?.products;
+  const [favProducts, setFavProducts] = useState(() => {
+    return JSON.parse(localStorage.getItem("favouriteProducts")) || [];
+  });
 
-  const [favProducts, setFavProducts] = useState([]);
-  const [sortedProducts, setSortedProducts] = useState(products);
+  const productsFromShop = shops?.find(
+    (shop) => shop?._id === currentShop
+  )?.products;
 
+  const [products, setProducts] = useState(productsFromShop);
 
-  useEffect(()=>{
-    setSortedProducts(products)
-  }, [currentShop])
-
-
-  useEffect(() => {
-    const favProducts = localStorage.getItem("favouriteProducts");
-    if (favProducts) {
-      setFavProducts(JSON.parse(favProducts));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("favouriteProducts", JSON.stringify(favProducts));
-  }, [products, favProducts]);
-
-
-  function sortByFavourites() {
-    if (products && favProducts.length > 0) {
-      const favProductsInList = favProducts.filter(item => products.some(product => product._id === item._id));
-      const newSortedProducts = [
-        ...favProductsInList,
-        ...products.filter((item) => !favProductsInList.includes(item)),
-      ];
-      setSortedProducts(newSortedProducts);
-    } else {
-      setSortedProducts(products);
-    }
-  }
-  
+  const [sortedProducts, setSortedProducts] = useState();
 
   useEffect(() => {
     sortByFavourites();
-  }, [ favProducts]);
+  }, [currentShop]);
+
+  useEffect(() => {
+    localStorage.setItem("favouriteProducts", JSON.stringify(favProducts));
+  }, [favProducts]);
+
+  function sortByFavourites() {
+    if (productsFromShop && favProducts.length > 0) {
+      const favProductsInList = favProducts.filter((item) =>
+        productsFromShop.some((product) => product._id === item._id)
+      );
+
+      const newSortedProducts = [
+        ...favProductsInList,
+        ...productsFromShop.filter(
+          (item) =>
+            !favProductsInList.some((favItem) => favItem._id === item._id)
+        ),
+      ];
+
+      console.log(newSortedProducts);
+
+      setSortedProducts(newSortedProducts);
+    } else {
+      setSortedProducts(productsFromShop);
+    }
+  }
+
+  useEffect(() => {
+    sortByFavourites();
+  }, [favProducts]);
 
   function toggleIsFavourite(product) {
     const isFavourite = favProducts.length > 0 && favProducts.includes(product);
@@ -63,9 +68,9 @@ function MedItemsList(props) {
   function sortByDate() {
     const newSortedProducts =
       sortedProducts.length > 0
-        ? [...sortedProducts ].sort((first, second) => {
-          return first.added > second.added ? -1 : 1;
-        })
+        ? [...sortedProducts].sort((first, second) => {
+            return first.added > second.added ? -1 : 1;
+          })
         : [...products].sort((first, second) => {
             return first.added > second.added ? -1 : 1;
           });
@@ -76,9 +81,9 @@ function MedItemsList(props) {
     const newSortedProducts =
       sortedProducts.length > 0
         ? [...sortedProducts].sort((first, second) => {
-          return first.price > second.price ? 1 : -1;
-        })
-        : [...products].sort((first, second) => {
+            return first.price > second.price ? 1 : -1;
+          })
+        : [...productsFromShop].sort((first, second) => {
             return first.price > second.price ? 1 : -1;
           });
     setSortedProducts(newSortedProducts);
