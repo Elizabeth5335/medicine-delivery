@@ -3,31 +3,77 @@ import MedItemCartList from "./MedItemCartList";
 import "../../CartPage.css";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
+import axios from "axios";
 
 function CartPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [formErrors, setFormErrors] = useState({});
 
   const { cartProducts, getCartTotal } = useContext(CartContext);
+
+  function validateForm() {
+    const errors = {};
+    if (!name.trim()) {
+      errors.name = "Name is required";
+    }
+    if (!email.trim()) {
+      errors.email = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      errors.email = "Email is invalid";
+    }
+    if (!phone.trim()) {
+      errors.phone = "Phone number is required";
+    } else if (!/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone)) {
+      errors.phone = "Phone number is invalid";
+    }
+    if (!address.trim()) {
+      errors.address = "Address is required";
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
+  function submitOrder(e) {
+    e.preventDefault();
+    if (validateForm()) {
+      axios
+        .post("/api/order", {
+          name,
+          email,
+          phone,
+          address,
+          orderProducts: cartProducts,
+        })
+        .then((response) => {
+          console.log("Order submitted successfully:", response.data);
+          window.alert("Order submitted successfully!");
+        })
+        .catch((error) => {
+          console.error("Error submitting order:", error);
+        });
+    }
+  }
 
   return (
     <div id="cart">
       <div className="flex">
-        <form id="cart-form">
+        <form id="cart-form" onSubmit={submitOrder}>
           <label>
             Full name:
             <input
               name="name"
               value={name}
-              onInput={(e) => {
-                setName(e.target.value);
-              }}
+              onChange={(e) => setName(e.target.value)}
               placeholder="Full name"
               id="name"
               required
             />
+            {formErrors.name && (
+              <span className="error">{formErrors.name}</span>
+            )}
           </label>
 
           <label>
@@ -35,14 +81,15 @@ function CartPage() {
             <input
               name="email"
               value={email}
-              onInput={(e) => {
-                setEmail(e.target.value);
-              }}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Email"
               id="email"
               type="email"
               required
             />
+            {formErrors.email && (
+              <span className="error">{formErrors.email}</span>
+            )}
           </label>
 
           <label>
@@ -50,14 +97,15 @@ function CartPage() {
             <input
               name="phone"
               value={phone}
-              onInput={(e) => {
-                setPhone(e.target.value);
-              }}
+              onChange={(e) => setPhone(e.target.value)}
               placeholder="Phone number"
               id="phone"
               required
               type="phone"
             />
+            {formErrors.phone && (
+              <span className="error">{formErrors.phone}</span>
+            )}
           </label>
 
           <label>
@@ -65,14 +113,16 @@ function CartPage() {
             <input
               name="address"
               value={address}
-              onInput={(e) => {
-                setAddress(e.target.value);
-              }}
+              onChange={(e) => setAddress(e.target.value)}
               placeholder="Address"
               id="address"
               required
             />
+            {formErrors.address && (
+              <span className="error">{formErrors.address}</span>
+            )}
           </label>
+          <button type="submit">Submit</button>
         </form>
 
         {cartProducts?.length > 0 ? (
@@ -93,7 +143,6 @@ function CartPage() {
           <Link className="button" to="/">
             Continue shopping
           </Link>
-          <button className="button">Submit</button>
         </div>
       )}
     </div>

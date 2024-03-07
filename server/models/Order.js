@@ -7,10 +7,15 @@ const itemSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   address: { type: String, required: true },
-  orderProducts: [{
-    product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
-    quantity: Number
-  }]
+  orderProducts: {
+    type: [
+      {
+        product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+        quantity: Number,
+      }
+    ],
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Order", itemSchema);

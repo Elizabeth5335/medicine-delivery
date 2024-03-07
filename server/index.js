@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require('cors');
 
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -36,16 +35,17 @@ app.get("/api/shops", async (req, res) => {
   }
 });
 
-const Order = require("./models/Order"); // Create the Shop model
+const Order = require("./models/Order");
 
-app.get("/api/order", async (req, res) => {
-  try {
-    const shopList = await Order.find().populate('orderProducts');
-    res.json(shopList);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Server Error");
-  }
+app.post('/api/order', (req, res) =>{
+    const {name, email, phone, address, orderProducts} = req.body;
+    Order.create({
+        name,
+        email,
+        phone, 
+        address, 
+        orderProducts
+    })
 });
 
 
