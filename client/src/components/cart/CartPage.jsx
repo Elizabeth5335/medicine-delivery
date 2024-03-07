@@ -69,79 +69,80 @@ function CartPage() {
   return (
     <div id="cart">
       <div className="flex">
-        <form id="cart-form" onSubmit={submitOrder}>
-          <label>
-            Full name:
-            <input
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full name"
-              id="name"
-              required
-            />
-            {formErrors.name && (
-              <span className="error">{formErrors.name}</span>
-            )}
-          </label>
+        {cartProducts?.length > 0 && (
+          <form id="cart-form" onSubmit={submitOrder}>
+            <label>
+              Full name:
+              <input
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Full name"
+                id="name"
+                required
+              />
+              {formErrors.name && (
+                <span className="error">{formErrors.name}</span>
+              )}
+            </label>
 
-          <label>
-            Email:
-            <input
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              id="email"
-              type="email"
-              required
-            />
-            {formErrors.email && (
-              <span className="error">{formErrors.email}</span>
-            )}
-          </label>
+            <label>
+              Email:
+              <input
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                id="email"
+                type="email"
+                required
+              />
+              {formErrors.email && (
+                <span className="error">{formErrors.email}</span>
+              )}
+            </label>
 
-          <label>
-            Phone number:
-            <input
-              name="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="Phone number"
-              id="phone"
-              required
-              type="phone"
-            />
-            {formErrors.phone && (
-              <span className="error">{formErrors.phone}</span>
-            )}
-          </label>
+            <label>
+              Phone number:
+              <input
+                name="phone"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone number"
+                id="phone"
+                required
+                type="phone"
+              />
+              {formErrors.phone && (
+                <span className="error">{formErrors.phone}</span>
+              )}
+            </label>
 
-          <label>
-            Address:
-            <input
-              name="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              placeholder="Address"
-              id="address"
-              required
-            />
-            {formErrors.address && (
-              <span className="error">{formErrors.address}</span>
-            )}
-          </label>
-          <button type="submit">Submit</button>
-          <div className="cart-footer">
-            <h2>Total price: {getCartTotal()}</h2>
+            <label>
+              Address:
+              <input
+                name="address"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Address"
+                id="address"
+                required
+              />
+              {formErrors.address && (
+                <span className="error">{formErrors.address}</span>
+              )}
+            </label>
 
-            {cartProducts?.length > 0 && (
+            <button type="submit">Submit</button>
+            <div className="cart-footer">
+              <h2>Total price: {getCartTotal()}</h2>
+
               <Link className="button" to="/">
                 Continue shopping
               </Link>
-            )}
-          </div>
-        </form>
+            </div>
+          </form>
+        )}
 
         {cartProducts?.length > 0 ? (
           <div>

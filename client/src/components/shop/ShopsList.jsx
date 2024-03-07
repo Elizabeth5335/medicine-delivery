@@ -4,7 +4,7 @@ function ShopsList(props) {
   const { currentShop, shops, toggleCurrentShop } = props;
   
   return (
-    <div>
+    <>
       <ul className="shops-list">
         {shops.map((shop) => {
           return (
@@ -20,7 +20,7 @@ function ShopsList(props) {
           );
         })}
       </ul>
-    </div>
+    </>
   );
 }
 

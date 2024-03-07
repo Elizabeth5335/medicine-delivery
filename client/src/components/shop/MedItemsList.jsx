@@ -41,8 +41,6 @@ function MedItemsList(props) {
         ),
       ];
 
-      console.log(newSortedProducts);
-
       setSortedProducts(newSortedProducts);
     } else {
       setSortedProducts(productsFromShop);

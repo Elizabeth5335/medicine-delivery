@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 
 function App() {
@@ -9,10 +9,20 @@ function App() {
     <nav id="navigation">
       <ul>
         <li>
-          <Link to="/">Shop</Link>
+          <NavLink
+            to="/"
+            className={({ isActive }) => [isActive ? "active" : ""]}
+          >
+            Shop
+          </NavLink>
         </li>
         <li className="cart-nav-container">
-          <Link to="/cart">Cart</Link>
+          <NavLink
+            to="/cart"
+            className={({ isActive }) => [isActive ? "active" : ""]}
+          >
+            Cart
+          </NavLink>
           {cartProducts.length > 0 && (
             <span className="items-in-cart">{cartProducts.length}</span>
           )}

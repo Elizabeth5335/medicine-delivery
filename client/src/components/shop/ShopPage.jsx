@@ -2,14 +2,12 @@ import { useState, useEffect, useContext } from "react";
 import ShopsList from "./ShopsList.jsx";
 import MedItemsList from "./MedItemsList.jsx";
 import axios from "axios";
-// import CartContext from '../CartContext'
 
 function ShopPage() {
   const [currentShop, setCurrentShop] = useState("");
   const [message, setMessage] = useState("");
-//   const [cart, setCart] = useState([]);
 
-// const cart = useContext(CartContext)
+  
   const [shops, setShops] = useState([]);
 
   function toggleCurrentShop(id) {
