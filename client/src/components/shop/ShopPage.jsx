@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ShopsList from "./ShopsList.jsx";
 import MedItemsList from "./MedItemsList.jsx";
 import axios from "axios";
+// import CartContext from '../CartContext'
 
 function ShopPage() {
   const [currentShop, setCurrentShop] = useState("");
   const [message, setMessage] = useState("");
-  const [cart, setCart] = useState([]);
+//   const [cart, setCart] = useState([]);
 
+// const cart = useContext(CartContext)
   const [shops, setShops] = useState([]);
 
   function toggleCurrentShop(id) {
@@ -18,12 +20,6 @@ function ShopPage() {
     //add quantity
     setCart((prev) => [...prev, item]);
   }
-
-  //  useEffect(() => {
-  //     fetch("http://localhost:4000/test")
-  //       .then((res) => res.json())
-  //       .then((data) => setMessage(data.message));
-  //   }, []);
 
   useEffect(() => {
     axios
@@ -36,15 +32,6 @@ function ShopPage() {
 
   return (
     <>
-      {/* <ul>
-        {shops.map((shop) => (
-          <li key={shop._id}>
-            <h3>{shop.name}</h3>
-            <p>{shop.description}</p>
-          </li>
-        ))}
-      </ul> */}
-
       {shops.length > 0 && (
         <ShopsList
           currentShop={currentShop ? currentShop : shops[0]?._id}

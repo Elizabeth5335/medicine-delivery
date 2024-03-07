@@ -1,11 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CartContext } from "../../context/CartContext";
 
 function MedItemCart(props) {
   let {
-    item: { id, name, image, price, quantity },
+    product: { _id, name, image, price, quantity },
   } = props; //add setQuantity
 
+  const { product } = props;
   // const [quantity, setQuantity] = useState(2);
+
+  const { setQuantity, removeFromCart } = useContext(CartContext);
+
+  function toggleRemove(product) {
+    if (window.confirm(`Remove ${name} from cart?`)) {
+      removeFromCart(product);
+    }
+  }
 
   return (
     <div className="cart-item">
@@ -19,10 +29,10 @@ function MedItemCart(props) {
             name="quantity"
             value={quantity}
             onInput={(e) => {
-              // setQuantity(e.target.value);
-              quantity = e.target.value;
+              setQuantity;
+              setQuantity(product, e.target.value);
             }}
-            placeholder={quantity}
+            placeholder={product.quantity}
             id="quantity"
             type="number"
             min={0}
@@ -30,6 +40,7 @@ function MedItemCart(props) {
             required
           />
         </label>
+        <button onClick={() => toggleRemove(product)}>X</button>
       </div>
     </div>
   );
