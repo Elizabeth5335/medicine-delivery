@@ -10,6 +10,13 @@ function MedItemsList(props) {
   const products = shops?.find((shop) => shop?._id === currentShop)?.products;
 
   const [favProducts, setFavProducts] = useState([]);
+  const [sortedProducts, setSortedProducts] = useState(products);
+
+
+  useEffect(()=>{
+    setSortedProducts(products)
+  }, [currentShop])
+
 
   useEffect(() => {
     const favProducts = localStorage.getItem("favouriteProducts");
@@ -20,24 +27,26 @@ function MedItemsList(props) {
 
   useEffect(() => {
     localStorage.setItem("favouriteProducts", JSON.stringify(favProducts));
-  }, [favProducts]);
+  }, [products, favProducts]);
 
-  const [sortedProducts, setSortedProducts] = useState([]);
 
   function sortByFavourites() {
     if (products && favProducts.length > 0) {
+      const favProductsInList = favProducts.filter(item => products.some(product => product._id === item._id));
       const newSortedProducts = [
-        ...favProducts,
-        ...products.filter((item) => !favProducts.includes(item)),
+        ...favProductsInList,
+        ...products.filter((item) => !favProductsInList.includes(item)),
       ];
       setSortedProducts(newSortedProducts);
     } else {
       setSortedProducts(products);
     }
   }
+  
+
   useEffect(() => {
     sortByFavourites();
-  }, [products, favProducts]);
+  }, [ favProducts]);
 
   function toggleIsFavourite(product) {
     const isFavourite = favProducts.length > 0 && favProducts.includes(product);
@@ -51,8 +60,36 @@ function MedItemsList(props) {
     }
   }
 
+  function sortByDate() {
+    const newSortedProducts =
+      sortedProducts.length > 0
+        ? [...sortedProducts ].sort((first, second) => {
+          return first.added > second.added ? -1 : 1;
+        })
+        : [...products].sort((first, second) => {
+            return first.added > second.added ? -1 : 1;
+          });
+    setSortedProducts(newSortedProducts);
+  }
+
+  function sortByPrice() {
+    const newSortedProducts =
+      sortedProducts.length > 0
+        ? [...sortedProducts].sort((first, second) => {
+          return first.price > second.price ? 1 : -1;
+        })
+        : [...products].sort((first, second) => {
+            return first.price > second.price ? 1 : -1;
+          });
+    setSortedProducts(newSortedProducts);
+  }
+
   return (
-    <div className="flex">
+    <div className="">
+      <div>
+        <button onClick={sortByDate}>Sort by date</button>
+        <button onClick={sortByPrice}>Sort by price</button>
+      </div>
       {sortedProducts?.length > 0 ? (
         <ul className="med-list">
           {sortedProducts.map((item) => {

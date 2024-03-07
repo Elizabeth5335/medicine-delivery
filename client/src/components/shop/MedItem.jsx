@@ -5,7 +5,7 @@ import { faHeart as heartRegular } from "@fortawesome/free-regular-svg-icons";
 
 function MedItem(props) {
   const {
-    item: { _id, name, image, price },
+    item: { _id, name, image, price, added },
     addToCart,
     isFavourite,
     toggleIsFavourite
