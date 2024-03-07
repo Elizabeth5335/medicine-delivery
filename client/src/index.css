@@ -116,3 +116,18 @@ ul{
   justify-content: center;
   align-items: center;
 }
+
+button, .button {
+  text-decoration: none;
+  padding: 8px 16px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #147e1f;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover, .button:hover {
+  background-color: #0d4c13;
+}

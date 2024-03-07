@@ -42,15 +42,28 @@
   margin: 0 3rem;
 }
 
-.med-item-image{
+.med-item-image {
   width: 150px;
   object-fit: contain;
   height: 150px;
 }
 
-.med-item-footer{
+.med-item-footer {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
   justify-content: space-between;
+}
+
+.icon {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.icon.heart:hover{
+  color: red;
+}
+
+.med-item-btn:hover {
+  color:green;
 }

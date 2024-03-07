@@ -40,7 +40,7 @@ function MedItemCart(props) {
             required
           />
         </label>
-        <button onClick={() => toggleRemove(product)}>X</button>
+        <button className="cart-item-remove" onClick={() => toggleRemove(product)}>X</button>
       </div>
     </div>
   );

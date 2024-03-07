@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as heartSolid } from "@fortawesome/free-solid-svg-icons";
+import { faCartPlus, faHeart as heartSolid } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as heartRegular } from "@fortawesome/free-regular-svg-icons";
 
 function MedItem(props) {
@@ -17,16 +17,20 @@ function MedItem(props) {
       <h4 className="med-item-text">{name}</h4>
       <div className="med-item-footer">
         <span className="price">{price.toFixed(2)}</span>
-        <div onClick={toggleIsFavourite}>
+        <div className="icon heart" onClick={toggleIsFavourite}>
         {isFavourite ? (
           <FontAwesomeIcon icon={heartSolid} color="red" />
         ) : (
           <FontAwesomeIcon icon={heartRegular} />
         )}
         </div>
-        <button className="med-item-btn" onClick={addToCart}>
+        <div className="icon med-item-btn" onClick={addToCart}>
+        <FontAwesomeIcon icon={faCartPlus} />
+        </div>
+        {/* <button className="med-item-btn" onClick={addToCart}>
           Add to cart
-        </button>
+    
+        </button> */}
       </div>
     </div>
   );
