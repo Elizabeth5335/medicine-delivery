@@ -7,7 +7,7 @@ require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: "https://medicine-delivery-3.onrender.com",
+  origin: ["https://medicine-delivery-3.onrender.com", "http://localhost:5173"],
 };
 app.use(express.json());
 app.use(cors(corsOptions));

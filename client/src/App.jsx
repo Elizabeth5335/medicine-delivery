@@ -5,7 +5,16 @@ import Navigation from "./components/common/Navigation.jsx";
 import { CartProvider } from "./context/CartContext.jsx";
 import axios from "axios";
 
-axios.defaults.baseURL = "https://medicine-delivery-1.onrender.com"
+let baseURL;
+
+if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+    baseURL = "http://localhost:5000/";
+} else {
+    baseURL = "https://medicine-delivery-1.onrender.com";
+}
+
+axios.defaults.baseURL = baseURL;
+
 
 function App() {
 
