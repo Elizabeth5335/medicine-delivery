@@ -1,22 +1,16 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 
 const app = express();
 require("dotenv").config();
 
 const PORT = process.env.PORT || 5000;
 
-
-app.use(cors(
-//     {credentials: true,
-//     origin: `http://127.0.0.1:5000`
-// }
-)); //to allow cross-origin requests
-
+const corsOptions = {
+  origin: "https://medicine-delivery-3.onrender.com",
+};
 app.use(express.json());
-
-
-
+app.use(cors(corsOptions));
 
 const mongoose = require("mongoose");
 mongoose.connect(process.env.MONGODB_URI, {
@@ -24,13 +18,11 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-
-
 const Shop = require("./models/Shop"); // Create the Shop model
 
 app.get("/api/shops", async (req, res) => {
   try {
-    const shopList = await Shop.find().populate('products');
+    const shopList = await Shop.find().populate("products");
     res.json(shopList);
   } catch (error) {
     console.error(error);
@@ -40,18 +32,17 @@ app.get("/api/shops", async (req, res) => {
 
 const Order = require("./models/Order");
 
-app.post('/api/order', (req, res) =>{
-    const {name, email, phone, address, orderProducts} = req.body;
-    Order.create({
-        name,
-        email,
-        phone, 
-        address, 
-        orderProducts
-    })
+app.post("/api/order", (req, res) => {
+  const { name, email, phone, address, orderProducts } = req.body;
+  Order.create({
+    name,
+    email,
+    phone,
+    address,
+    orderProducts,
+  });
 });
 
-
-app.listen(PORT, ()=>{
-    console.log(`server is running on port ${PORT}`)
+app.listen(PORT, () => {
+  console.log(`server is running on port ${PORT}`);
 });
