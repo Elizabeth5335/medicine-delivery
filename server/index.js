@@ -2,7 +2,10 @@ const express = require("express");
 const cors = require('cors');
 
 const app = express();
+require("dotenv").config();
+
 const PORT = process.env.PORT || 5000;
+
 
 app.use(cors(
 //     {credentials: true,
@@ -16,7 +19,7 @@ app.use(express.json());
 
 
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/medicineDelivery", {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
