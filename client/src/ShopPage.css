@@ -100,3 +100,20 @@
     padding: 0;
   }
 }
+
+
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  margin-top: 1em;
+
+}
+
+.search-bar:focus {
+  outline: none;
+  border-color: #0d4c13;
+}

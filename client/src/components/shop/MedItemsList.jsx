@@ -1,6 +1,7 @@
 import { useContext, useState, useEffect } from "react";
 import MedItem from "./MedItem";
 import { CartContext } from "../../context/CartContext";
+import SearchBar from "./SearchBar";
 
 function MedItemsList(props) {
   const { currentShop, shops } = props;
@@ -87,8 +88,31 @@ function MedItemsList(props) {
     setSortedProducts(newSortedProducts);
   }
 
+  function searchProducts(searchInput) {
+    if (searchInput.length > 1) {
+      const searchLowerCase = searchInput.toLowerCase();
+      
+      const startsWithItems = productsFromShop.filter((item) => {
+        return item.name.toLowerCase().startsWith(searchLowerCase);
+      });
+  
+      const containsItems = productsFromShop.filter((item) => {
+        return item.name.toLowerCase().includes(searchLowerCase) && !startsWithItems.includes(item);
+      });
+  
+      const filteredItems = [...startsWithItems, ...containsItems];
+  
+      setSortedProducts(filteredItems);
+    } else {
+      setSortedProducts(productsFromShop);
+    }
+  }
+  
+
+
   return (
     <div className="shop-items">
+      <SearchBar items={sortedProducts} searchProducts={searchProducts} />
       <div className="sort-buttons">
         <button onClick={sortByDate}>Sort by date</button>
         <button onClick={sortByPrice}>Sort by price</button>
