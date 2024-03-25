@@ -88,8 +88,8 @@ function MedItemsList(props) {
   }
 
   return (
-    <div className="">
-      <div>
+    <div className="shop-items">
+      <div className="sort-buttons">
         <button onClick={sortByDate}>Sort by date</button>
         <button onClick={sortByPrice}>Sort by price</button>
       </div>
