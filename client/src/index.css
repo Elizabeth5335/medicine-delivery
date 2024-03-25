@@ -86,3 +86,11 @@ button:hover {
   background-color: #0d4c13;
   color: white;
 }
+
+
+.spinner{
+  width: 100%;
+  height: calc(100vh - 100px);
+  justify-content: center;
+  align-items: center;
+}
