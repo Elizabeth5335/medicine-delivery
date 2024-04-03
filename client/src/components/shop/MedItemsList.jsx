@@ -9,7 +9,6 @@ function MedItemsList(props) {
   const { currentShop, isSorted, sortByDate, sortByPrice } = props;
   const { addToCart } = useContext(CartContext);
 
-  const [searchedProducts, setSearchedProducts] = useState([]);
   const [products, setProducts] = useState([]);
   const [displayedProducts, setDisplayedProducts] = useState(products);
   const [favProducts, setFavProducts] = useState(() => {
@@ -25,12 +24,8 @@ function MedItemsList(props) {
   }, [currentShop, isSorted]);
 
   useEffect(() => {
-    console.log("displayedProducts");
-    console.log(displayedProducts);
     setDisplayedProducts(products);
     isSorted.isSorted === "" && sortByFavourites();
-    console.log("displayedProducts");
-    console.log(displayedProducts);
   }, [products]);
 
   useEffect(() => {
@@ -80,28 +75,28 @@ function MedItemsList(props) {
     }
   }
 
-  // function searchProducts(searchInput) {
-  //   if (searchInput.length > 1) {
-  //     const searchLowerCase = searchInput.toLowerCase();
+  function searchProducts(searchInput) {
+    if (searchInput.length > 1) {
+      const searchLowerCase = searchInput.toLowerCase();
 
-  //     const startsWithItems = products.filter((item) => {
-  //       return item.name.toLowerCase().startsWith(searchLowerCase);
-  //     });
+      const startsWithItems = products.filter((item) => {
+        return item.name.toLowerCase().startsWith(searchLowerCase);
+      });
 
-  //     const containsItems = products.filter((item) => {
-  //       return (
-  //         item.name.toLowerCase().includes(searchLowerCase) &&
-  //         !startsWithItems.includes(item)
-  //       );
-  //     });
+      const containsItems = products.filter((item) => {
+        return (
+          item.name.toLowerCase().includes(searchLowerCase) &&
+          !startsWithItems.includes(item)
+        );
+      });
 
-  //     const filteredItems = [...startsWithItems, ...containsItems];
+      const filteredItems = [...startsWithItems, ...containsItems];
 
-  //     setSearchedProducts(filteredItems);
-  //   } else {
-  //     setSearchedProducts(products);
-  //   }
-  // }
+      setDisplayedProducts(filteredItems);
+    } else {
+      setDisplayedProducts(products);
+    }
+  }
 
   return (
     <div className="shop-items">
@@ -111,8 +106,6 @@ function MedItemsList(props) {
       {displayedProducts?.length > 0 ? (
         <ul className="med-list">
           {displayedProducts.map((item) => {
-            console.log(favProducts)
-            console.log(item)
             return (
               <MedItem
                 key={item?._id}
