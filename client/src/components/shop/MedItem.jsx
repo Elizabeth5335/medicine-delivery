@@ -16,7 +16,7 @@ function MedItem(props) {
       <img className="med-item-image" src={image} alt={name} />
       <h4 className="med-item-text">{name}</h4>
       <div className="med-item-footer">
-        <span className="price">{price.toFixed(2)}</span>
+        <span className="price">{price?.toFixed(2)}</span>
         <div className="icon heart" onClick={toggleIsFavourite}>
         {isFavourite ? (
           <FontAwesomeIcon icon={heartSolid} color="red" />

@@ -18,17 +18,45 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
 });
 
-const Shop = require("./models/Shop"); // Create the Shop model
+const Shop = require("./models/Shop");
 
 app.get("/api/shops", async (req, res) => {
   try {
-    const shopList = await Shop.find().populate("products");
+    const shopList = await Shop.find();
     res.json(shopList);
   } catch (error) {
     console.error(error);
     res.status(500).send("Server Error");
   }
 });
+
+
+app.get("/api/products", async (req, res) => {
+  try {
+    const { currentShop } = req.query;
+    let sortCriteria = {};
+
+    if (req.query.sortBy!=='' && req.query.order!=='') {
+      sortCriteria[req.query.sortBy] = req.query.order === 'desc' ? -1 : 1;
+    }
+
+    const shop = await Shop.findById(currentShop).populate({
+      path: "products",
+      options: { sort: sortCriteria }
+    });
+
+    if (!shop) {
+      return res.status(404).json({ message: "Shop not found" });
+    }
+
+    res.json(shop.products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
+
 
 const Order = require("./models/Order");
 

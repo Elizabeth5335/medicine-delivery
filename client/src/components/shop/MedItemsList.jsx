@@ -2,124 +2,117 @@ import { useContext, useState, useEffect } from "react";
 import MedItem from "./MedItem";
 import { CartContext } from "../../context/CartContext";
 import SearchBar from "./SearchBar";
+import SortButtons from "./SortButtons";
+import axios from "axios";
 
 function MedItemsList(props) {
-  const { currentShop, shops } = props;
-
+  const { currentShop, isSorted, sortByDate, sortByPrice } = props;
   const { addToCart } = useContext(CartContext);
 
+  const [searchedProducts, setSearchedProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [displayedProducts, setDisplayedProducts] = useState(products);
   const [favProducts, setFavProducts] = useState(() => {
     return JSON.parse(localStorage.getItem("favouriteProducts")) || [];
   });
-
-  const productsFromShop = shops?.find(
-    (shop) => shop?._id === currentShop
-  )?.products;
-
-  const [products, setProducts] = useState(productsFromShop);
-
-  const [sortedProducts, setSortedProducts] = useState();
-
-  useEffect(() => {
-    sortByFavourites();
-  }, [currentShop]);
 
   useEffect(() => {
     localStorage.setItem("favouriteProducts", JSON.stringify(favProducts));
   }, [favProducts]);
 
-  function sortByFavourites() {
-    if (productsFromShop && favProducts.length > 0) {
-      const favProductsInList = favProducts.filter((item) =>
-        productsFromShop.some((product) => product._id === item._id)
-      );
-
-      const newSortedProducts = [
-        ...favProductsInList,
-        ...productsFromShop.filter(
-          (item) =>
-            !favProductsInList.some((favItem) => favItem._id === item._id)
-        ),
-      ];
-
-      setSortedProducts(newSortedProducts);
-    } else {
-      setSortedProducts(productsFromShop);
-    }
-  }
+  useEffect(() => {
+    fetchProducts();
+  }, [currentShop, isSorted]);
 
   useEffect(() => {
-    sortByFavourites();
+    console.log("displayedProducts");
+    console.log(displayedProducts);
+    setDisplayedProducts(products);
+    isSorted.isSorted === "" && sortByFavourites();
+    console.log("displayedProducts");
+    console.log(displayedProducts);
+  }, [products]);
+
+  useEffect(() => {
+    isSorted.isSorted === "" && sortByFavourites();
   }, [favProducts]);
 
-  function toggleIsFavourite(product) {
-    const isFavourite = favProducts.length > 0 && favProducts.includes(product);
-    if (isFavourite) {
-      const updatedCartProducts = favProducts.filter(
-        (cartProduct) => cartProduct._id !== product._id
+  async function fetchProducts() {
+    try {
+      const response = await axios.get("/api/products", {
+        params: {
+          currentShop: currentShop,
+          sortBy: isSorted.criteria,
+          order: isSorted.isSorted,
+        },
+      });
+      setProducts(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function sortByFavourites() {
+    if (products.length > 0 && favProducts.length > 0) {
+      // const favProductIds = favProducts.map((fav) => fav._id);
+      const favProductsInList = products.filter((product) =>
+        favProducts.includes(product._id)
       );
-      setFavProducts(updatedCartProducts);
-    } else {
-      setFavProducts([...favProducts, product]);
+      const sortedProducts = [
+        ...favProductsInList,
+        ...products.filter((product) => !favProducts.includes(product._id)),
+      ];
+      setDisplayedProducts(sortedProducts);
+      console.log(displayedProducts)
+
     }
   }
 
-  function sortByDate() {
-    const newSortedProducts =
-      sortedProducts.length > 0
-        ? [...sortedProducts].sort((first, second) => {
-            return first.added > second.added ? -1 : 1;
-          })
-        : [...products].sort((first, second) => {
-            return first.added > second.added ? -1 : 1;
-          });
-    setSortedProducts(newSortedProducts);
-  }
-
-  function sortByPrice() {
-    const newSortedProducts =
-      sortedProducts.length > 0
-        ? [...sortedProducts].sort((first, second) => {
-            return first.price > second.price ? 1 : -1;
-          })
-        : [...productsFromShop].sort((first, second) => {
-            return first.price > second.price ? 1 : -1;
-          });
-    setSortedProducts(newSortedProducts);
-  }
-
-  function searchProducts(searchInput) {
-    if (searchInput.length > 1) {
-      const searchLowerCase = searchInput.toLowerCase();
-      
-      const startsWithItems = productsFromShop.filter((item) => {
-        return item.name.toLowerCase().startsWith(searchLowerCase);
-      });
-  
-      const containsItems = productsFromShop.filter((item) => {
-        return item.name.toLowerCase().includes(searchLowerCase) && !startsWithItems.includes(item);
-      });
-  
-      const filteredItems = [...startsWithItems, ...containsItems];
-  
-      setSortedProducts(filteredItems);
+  function toggleIsFavourite(product) {
+    const isFavourite = favProducts.length > 0 && favProducts.includes(product._id);
+    if (isFavourite) {
+      const updatedFavProducts = favProducts.filter(
+        (favProduct) => favProduct !== product._id
+      );
+      setFavProducts(updatedFavProducts);
     } else {
-      setSortedProducts(productsFromShop);
+      setFavProducts([...favProducts, product._id]);
     }
   }
-  
 
+  // function searchProducts(searchInput) {
+  //   if (searchInput.length > 1) {
+  //     const searchLowerCase = searchInput.toLowerCase();
+
+  //     const startsWithItems = products.filter((item) => {
+  //       return item.name.toLowerCase().startsWith(searchLowerCase);
+  //     });
+
+  //     const containsItems = products.filter((item) => {
+  //       return (
+  //         item.name.toLowerCase().includes(searchLowerCase) &&
+  //         !startsWithItems.includes(item)
+  //       );
+  //     });
+
+  //     const filteredItems = [...startsWithItems, ...containsItems];
+
+  //     setSearchedProducts(filteredItems);
+  //   } else {
+  //     setSearchedProducts(products);
+  //   }
+  // }
 
   return (
     <div className="shop-items">
-      <SearchBar items={sortedProducts} searchProducts={searchProducts} />
-      <div className="sort-buttons">
-        <button onClick={sortByDate}>Sort by date</button>
-        <button onClick={sortByPrice}>Sort by price</button>
-      </div>
-      {sortedProducts?.length > 0 ? (
+      <SearchBar items={products} searchProducts={searchProducts} />
+      <SortButtons sortByDate={sortByDate} sortByPrice={sortByPrice} />
+
+      {displayedProducts?.length > 0 ? (
         <ul className="med-list">
-          {sortedProducts.map((item) => {
+          {displayedProducts.map((item) => {
+            console.log(favProducts)
+            console.log(item)
             return (
               <MedItem
                 key={item?._id}
@@ -128,7 +121,7 @@ function MedItemsList(props) {
                   addToCart(item);
                 }}
                 isFavourite={
-                  favProducts.length > 0 && favProducts.includes(item)
+                  favProducts.length > 0 && favProducts.includes(item?._id)
                 }
                 toggleIsFavourite={() => {
                   toggleIsFavourite(item);
