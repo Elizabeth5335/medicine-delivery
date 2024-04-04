@@ -39,6 +39,9 @@ app.get("/api/products", async (req, res) => {
     if (req.query.sortBy!=='' && req.query.order!=='') {
       sortCriteria[req.query.sortBy] = req.query.order === 'desc' ? -1 : 1;
     }
+    else{
+      sortCriteria.name = 1;
+    }
 
     const shop = await Shop.findById(currentShop).populate({
       path: "products",

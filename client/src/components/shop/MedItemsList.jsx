@@ -49,7 +49,6 @@ function MedItemsList(props) {
 
   function sortByFavourites() {
     if (products.length > 0 && favProducts.length > 0) {
-      // const favProductIds = favProducts.map((fav) => fav._id);
       const favProductsInList = products.filter((product) =>
         favProducts.includes(product._id)
       );
@@ -101,7 +100,7 @@ function MedItemsList(props) {
   return (
     <div className="shop-items">
       <SearchBar items={products} searchProducts={searchProducts} />
-      <SortButtons sortByDate={sortByDate} sortByPrice={sortByPrice} />
+      <SortButtons sortByDate={sortByDate} sortByPrice={sortByPrice} isSorted={isSorted} />
 
       {displayedProducts?.length > 0 ? (
         <ul className="med-list">
