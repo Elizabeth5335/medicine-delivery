@@ -8,6 +8,10 @@ import "./index.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import Login from "./components/user/Login.jsx";
+import Signup from "./components/user/Signup.jsx";
+import Account from "./components/user/Account.jsx";
+import { UserProvider } from "./context/UserContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +24,30 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/login",
+        element: (
+          <UserProvider>
+            <Login />
+          </UserProvider>
+        ),
+      },
+      {
+        path: "/signup",
+        element: (
+          <UserProvider>
+            <Signup />
+          </UserProvider>
+        ),
+      },
+      {
+        path: "/account",
+        element: (
+          <UserProvider>
+            <Account />
+          </UserProvider>
+        ),
       },
     ],
   },

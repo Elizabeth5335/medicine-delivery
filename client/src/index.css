@@ -23,9 +23,16 @@ ul {
       }
     }
 
-    li:first-child {
-      padding-left: 0;
+    li {
       border-right: 2px solid black;
+    }
+
+    li:first-child{
+      padding-left: 0;
+    }
+
+    li:last-child {
+      border-right: none;
     }
   }
 }
@@ -48,7 +55,7 @@ ul {
 .items-in-cart {
   position: absolute;
   top: -8px;
-  right: -8px;
+  right: 4px;
   background-color: #2b2b2b;
   color: #fff;
   border-radius: 50%;

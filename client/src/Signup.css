@@ -1,0 +1,16 @@
+.signup {
+  .input-group {
+    position: relative;
+    display: inline-block;
+  }
+  .input-group-text {
+    position: absolute;
+    right: 0;
+    top: 20%;
+  }
+
+  input {
+    padding-right: 20px;
+    width: 100%;
+  }
+}

@@ -1,0 +1,45 @@
+#user-info{
+      .error{
+        color: red;
+      }
+      .user-info-item {
+        margin-bottom: 2rem;
+        cursor: pointer;
+      }
+      
+      .user-info-input, .user-info-item input[type="text"] {
+        padding: 8px;
+        margin-bottom: 2rem;
+        margin-left: 5px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      
+      .change-password-container {
+        margin-top: 20px;
+      }
+      
+      .change-password-label {
+        font-weight: bold;
+      }
+      
+      .change-password-input {
+        margin-top: 10px;
+        width: 200px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+
+      .input-group {
+        position: relative;
+        display: inline-block;
+      }
+      .input-group-text {
+        position: absolute;
+        right: 0;
+        top: 20%;
+      }
+      
+}
