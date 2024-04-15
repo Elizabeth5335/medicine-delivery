@@ -79,7 +79,7 @@ app.post("/api/users", async (req, res) => {
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    res.json({ status: "error", error: "User with this email already exists" });
+    res.json({ status: "error", error: `User with this email ${email} already exists` });
   } else {
     User.create({
       name,
@@ -136,6 +136,39 @@ app.post("/api/login", async (req, res) => {
   res.json(response);
 });
 
+app.post("/api/userInfo", async (req, res) => {
+  const { newData: user, prevEmail } = req.body;
+  const id = user._id;
+  const email = user.email;
+
+  if (email !== prevEmail && prevEmail) {
+    const existingEmail = await User.findOne({ email: email });
+    if (existingEmail) {
+      res.json({
+        status: "error",
+        error: `User with this email ${email} already exists`,
+      });
+      return;
+    }
+  }
+  try {
+    const existingUser = await User.findById(id);
+    if (!existingUser) {
+      return res.status(404).json({ status: "error", error: "User not found" });
+    }
+    await User.findByIdAndUpdate(id, {name: user.name,
+      email: user.email,
+      phone: user.phone,
+      address: user.address,
+      hashedPassword: user.hashedPassword,
+      });
+    res
+      .status(200)
+      .json({ status: "ok", message: "User info updated successfully" });
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);

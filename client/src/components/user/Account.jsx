@@ -1,11 +1,50 @@
-import React from "react";
 import UserInfo from "./UserInfo";
 
+import { useState } from "react";
+import React from "react";
+import Orders from "./Orders";
+import Coupons from "./Coupons";
+
 export default function Account() {
-  //show info + orders - tabs
+  const [currentTab, setCurrentTab] = useState("tab_0");
+
+  const tabs = [
+    { id: "tab_0", name: "User Info" },
+    { id: "tab_1", name: "Orders" },
+    { id: "tab_2", name: "Coupons" },
+  ];
+
+  function toggleCurrentTab(id) {
+    setCurrentTab(id);
+  }
+
+  function tabsSwitcher() {
+    switch (currentTab) {
+      case "tab_1":
+        return <Orders />;
+      case "tab_2":
+        return <Coupons />;
+      default:
+        return <UserInfo />;
+    }
+  }
+
   return (
-    <div>
-      <UserInfo />
+    <div className="account">
+      <ul className="account-tabs">
+        {tabs.map((tab) => {
+          return (
+            <li
+              key={tab.id}
+              className={`account-tab ${currentTab === tab.id ? "active" : ""}`}
+              onClick={() => toggleCurrentTab(tab.id)}
+            >
+              {tab.name}
+            </li>
+          );
+        })}
+      </ul>
+      {tabsSwitcher()}
     </div>
   );
 }

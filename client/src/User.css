@@ -1,45 +1,110 @@
-#user-info{
-      .error{
-        color: red;
-      }
-      .user-info-item {
-        margin-bottom: 2rem;
-        cursor: pointer;
-      }
-      
-      .user-info-input, .user-info-item input[type="text"] {
-        padding: 8px;
-        margin-bottom: 2rem;
-        margin-left: 5px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-      }
-      
-      .change-password-container {
-        margin-top: 20px;
-      }
-      
-      .change-password-label {
-        font-weight: bold;
-      }
-      
-      .change-password-input {
-        margin-top: 10px;
-        width: 200px;
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-      }
+#user-info {
+  max-width: 600px;
+  text-align: start;
+  margin: auto;
+
+  .error {
+    color: red;
+  }
+
+  .flex{
+    margin-top: 0;
+  }
 
 
-      .input-group {
-        position: relative;
-        display: inline-block;
-      }
-      .input-group-text {
-        position: absolute;
-        right: 0;
-        top: 20%;
-      }
-      
+  .user-info-item {
+    margin-bottom: 2rem;
+    cursor: pointer;
+    /* padding: 8px; */
+    /* border: 1px solid #ccc;
+    border-radius: 5px; */
+  }
+
+
+  .user-info-content, .flex{
+    margin-top: 0.5rem;
+  }
+
+  .user-info-input{
+    margin-right: -15px;
+  }
+
+  button{
+    margin-right: 0;
+    position: relative;
+  }
+
+
+  .user-info-input, .user-info-content,
+  .user-info-item input[type="text"] {
+    font: inherit;
+    width: -webkit-fill-available;
+    padding: 8px;
+    /* margin-bottom: 2rem; */
+    /* margin-left: 5px; */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  
+  .change-password-container {
+    margin-top: 20px;
+  }
+
+  .change-password-label {
+    font-weight: bold;
+  }
+
+  .change-password-input {
+    margin-top: 10px;
+    width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .input-group {
+    position: relative;
+    display: inline-block;
+  }
+  .input-group-text {
+    position: absolute;
+    right: 0;
+    top: 20%;
+  }
+}
+
+.account {
+  display: block;
+  width: 100%;
+  .account-tabs {
+    border-bottom: 3px solid #434343;
+    width: 40vw;
+    min-width: fit-content;
+    margin: auto;
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: space-around;
+    .account-tab {
+      text-wrap: nowrap;
+      padding: 8px 16px;
+      margin: 1rem auto 4px 0;
+      cursor: pointer;
+      text-align: center;
+      /* border-right: 1px solid rgb(61, 61, 61); */
+      border-radius: 8px;
+    }
+    .account-tab:hover {
+      background-color: #aaaaaa;
+    }
+
+    .account-tab.active {
+      background-color: #434343;
+      color: #fff;
+    }
+
+    .account-tab.active:hover {
+      background-color: #434343;
+    }
+  }
 }
