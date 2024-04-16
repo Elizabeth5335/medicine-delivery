@@ -29,6 +29,7 @@ export default function UserInfo() {
             className="user-info-item"
             onClick={() => {
               toggleEditing(item);
+              setTmpValue(user[item]);
             }}
           >
             <strong>{item}:</strong>{" "}

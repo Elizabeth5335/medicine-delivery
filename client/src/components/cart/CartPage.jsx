@@ -10,9 +10,11 @@ function CartPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [coupons, setCoupons] = useState("");
   const [formErrors, setFormErrors] = useState({});
 
-  const { cartProducts, getCartTotal, clearCart } = useContext(CartContext);
+  const { cartProducts, getCartTotal, clearCart, checkCoupon } =
+    useContext(CartContext);
 
   function validateForm() {
     const errors = {};
@@ -57,6 +59,7 @@ function CartPage() {
         setName("");
         setEmail("");
         setPhone("");
+        setCoupons("");
         setAddress("");
 
         return alert("Order submitted successfully!");
@@ -133,9 +136,23 @@ function CartPage() {
               )}
             </label>
 
+            <label>
+              Paste your coupons:
+              <input
+                name="coupons"
+                value={coupons}
+                onChange={(e) => setCoupons(e.target.value)}
+                placeholder="Coupons"
+                id="coupons"
+              />
+              {coupons && checkCoupon(coupons) && (
+                <span className="error">{checkCoupon(coupons)}</span>
+              )}
+            </label>
+
             <button type="submit">Submit</button>
             <div className="cart-footer">
-              <h2>Total price: {getCartTotal()}</h2>
+              <h2>Total price: {getCartTotal(coupons)}</h2>
 
               <Link className="button" to="/">
                 Continue shopping

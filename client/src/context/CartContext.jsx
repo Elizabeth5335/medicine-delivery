@@ -3,7 +3,9 @@ import { createContext, useState, useEffect } from "react";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cartProducts, setCartProducts] = useState(JSON.parse(localStorage.getItem("cartProducts")) || []);
+  const [cartProducts, setCartProducts] = useState(
+    JSON.parse(localStorage.getItem("cartProducts")) || []
+  );
 
   function addToCart(product) {
     const isProductInCart = cartProducts.find(
@@ -56,11 +58,33 @@ export const CartProvider = ({ children }) => {
     setCartProducts([]);
   }
 
-  function getCartTotal() {
-    return cartProducts.reduce(
+  const validCoupons = {
+    Spring40: 40,
+    Family20: 20,
+  };
+
+  function checkCoupon(coupon) {
+    if (validCoupons.hasOwnProperty(coupon)) {
+      return "";
+    } else {
+      console.warn("Invalid coupon code");
+      return "Invalid coupon code";
+    }
+  }
+
+  function getCartTotal(coupon = null) {
+    let total = cartProducts.reduce(
       (total, product) => total + product.price * product.quantity,
       0
     );
+
+    if (checkCoupon(coupon) === "") {
+      const discountPercentage = validCoupons[coupon];
+      const discountAmount = (total * discountPercentage) / 100;
+      total -= discountAmount;
+    }
+
+    return total;
   }
 
   useEffect(() => {
@@ -75,7 +99,8 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         clearCart,
         getCartTotal,
-        setQuantity
+        setQuantity,
+        checkCoupon
       }}
     >
       {children}
