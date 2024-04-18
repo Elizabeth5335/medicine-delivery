@@ -8,6 +8,7 @@ const itemSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   address: { type: String, required: true },
   hashedPassword: {type: String, required: true},
+  level: {type: String},
   orders: {
     type: [
       {

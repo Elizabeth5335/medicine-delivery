@@ -77,7 +77,7 @@ app.get("/api/userOrders", async (req, res) => {
   try {
     const { currentUser } = req.query;
 
-    const orders = await Order.find({email: currentUser}).populate({
+    const orders = await Order.find({ email: currentUser }).populate({
       path: "orderProducts",
       populate: {
         path: "product",
@@ -95,7 +95,6 @@ app.get("/api/userOrders", async (req, res) => {
   }
 });
 
-
 const User = require("./models/User"); //sign up
 
 app.post("/api/users", async (req, res) => {
@@ -103,7 +102,10 @@ app.post("/api/users", async (req, res) => {
 
   const existingUser = await User.findOne({ email });
   if (existingUser) {
-    res.json({ status: "error", error: `User with this email ${email} already exists` });
+    res.json({
+      status: "error",
+      error: `User with this email ${email} already exists`,
+    });
   } else {
     User.create({
       name,
@@ -180,17 +182,42 @@ app.post("/api/userInfo", async (req, res) => {
     if (!existingUser) {
       return res.status(404).json({ status: "error", error: "User not found" });
     }
-    await User.findByIdAndUpdate(id, {name: user.name,
+    await User.findByIdAndUpdate(id, {
+      name: user.name,
       email: user.email,
       phone: user.phone,
       address: user.address,
       hashedPassword: user.hashedPassword,
-      });
+    });
     res
       .status(200)
       .json({ status: "ok", message: "User info updated successfully" });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
+  }
+});
+
+const Coupon = require("./models/Coupon");
+
+app.get("/api/coupons", async (req, res) => {
+  const { userToFind } = req.query;
+  let user = null;
+  if (!userToFind) {
+    console.log("no user");
+  } else {
+    user = await User.findOne({ email: userToFind });
+  }
+  try {
+    if (userToFind === "admin") {
+      res.json(await Coupon.find());
+    } else {
+      const commonCoupons = await Coupon.find({ userLevel: null });
+      const userCoupons = await Coupon.find({ userLevel: user?.level });
+      res.json(user ? userCoupons.concat(commonCoupons) : commonCoupons);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
   }
 });
 

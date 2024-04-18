@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-
+import axios from "axios";
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
@@ -15,13 +15,20 @@ export const CartProvider = ({ children }) => {
     if (isProductInCart) {
       const updatedCartProducts = cartProducts.map((cartProduct) =>
         cartProduct._id === productToAdd._id
-          // ? { ...cartProduct, quantity: cartProduct.quantity + 1 }
-          ? { ...cartProduct, product: cartProduct._id, quantity: +cartProduct.quantity + 1 }
+          ? // ? { ...cartProduct, quantity: cartProduct.quantity + 1 }
+            {
+              ...cartProduct,
+              product: cartProduct._id,
+              quantity: +cartProduct.quantity + 1,
+            }
           : cartProduct
       );
       setCartProducts(updatedCartProducts);
     } else {
-      setCartProducts([...cartProducts, {...productToAdd, product: productToAdd._id, quantity: 1 }]);
+      setCartProducts([
+        ...cartProducts,
+        { ...productToAdd, product: productToAdd._id, quantity: 1 },
+      ]);
     }
   }
 
@@ -59,17 +66,30 @@ export const CartProvider = ({ children }) => {
     setCartProducts([]);
   }
 
-  const validCoupons = {
-    Spring40: 40,
-    Family20: 20,
-  };
+  const [validCoupons, setValidCoupons] = useState([]);
+
+  async function fetchCoupons() {
+    try {
+      const response = await axios.get("/api/coupons", {
+        params: {
+          userToFind: "admin",
+        },
+      });
+      setValidCoupons(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCoupons();
+  }, []);
 
   function checkCoupon(coupon) {
-    if (validCoupons.hasOwnProperty(coupon)) {
-      return "";
-    } else {
-      return "Invalid coupon code";
-    }
+    const couponExists = validCoupons.some(
+      (validCoupon) => validCoupon.name === coupon
+    );
+    return couponExists ? "" : "Invalid coupon code";
   }
 
   function getCartTotal(coupon = null) {
@@ -79,11 +99,15 @@ export const CartProvider = ({ children }) => {
     );
 
     if (checkCoupon(coupon) === "") {
-      const discountPercentage = validCoupons[coupon];
-      const discountAmount = (total * discountPercentage) / 100;
-      total -= discountAmount;
+      const couponObject = validCoupons.find(
+        (validCoupon) => validCoupon.name === coupon
+      );
+      if (couponObject) {
+        const discountPercentage = couponObject.discount;
+        const discountAmount = (total * discountPercentage) / 100;
+        total -= discountAmount;
+      }
     }
-
     return total;
   }
 
@@ -100,7 +124,7 @@ export const CartProvider = ({ children }) => {
         clearCart,
         getCartTotal,
         setQuantity,
-        checkCoupon
+        checkCoupon,
       }}
     >
       {children}
