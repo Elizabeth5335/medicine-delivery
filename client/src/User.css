@@ -7,10 +7,9 @@
     color: red;
   }
 
-  .flex{
+  .flex {
     margin-top: 0;
   }
-
 
   .user-info-item {
     margin-bottom: 2rem;
@@ -20,22 +19,22 @@
     border-radius: 5px; */
   }
 
-
-  .user-info-content, .flex{
+  .user-info-content,
+  .flex {
     margin-top: 0.5rem;
   }
 
-  .user-info-input{
+  .user-info-input {
     margin-right: -15px;
   }
 
-  button{
+  button {
     margin-right: 0;
     position: relative;
   }
 
-
-  .user-info-input, .user-info-content,
+  .user-info-input,
+  .user-info-content,
   .user-info-item input[type="text"] {
     font: inherit;
     width: -webkit-fill-available;
@@ -46,7 +45,6 @@
     border-radius: 5px;
   }
 
-  
   .change-password-container {
     margin-top: 20px;
   }
@@ -105,6 +103,39 @@
 
     .account-tab.active:hover {
       background-color: #434343;
+    }
+  }
+}
+
+.coupons {
+  h2 {
+    text-align: center;
+  }
+
+  .coupons-list {
+    max-width: 900px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+
+  }
+
+  .coupon {
+    text-align: center;
+    cursor: pointer;
+    margin-block: 1rem;
+    display: flex;
+    align-items: baseline;
+
+    span{
+      font-size: larger;
+      font-weight: bold;
+    }
+
+    .img{
+      font-size: 1.5rem;
+      color: #434343;
+      margin-left: 8px;
     }
   }
 }

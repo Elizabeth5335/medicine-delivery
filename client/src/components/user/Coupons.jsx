@@ -17,37 +17,40 @@ export default function Coupons() {
   }
 
   return (
-    <div>
+    <div className="coupons">
       <h2>Coupons for You</h2>
       <div className="coupons-list">
         <ul>
-          <li onClick={() => copy("Spring40")}>
-            <span>Spring40 - 40% discount for new collection</span>
+          <li className="coupon" onClick={() => copy("Spring40")}>
+            <p>
+              <span>Spring40 </span>- 40% discount for new collection
+            </p>
+
             {copiedCoupon === "Spring40" ? (
               <FontAwesomeIcon
                 icon={faClipboardCheck}
-                color="green"
-                style={{ marginLeft: "5px" }}
+                className="img"
               />
             ) : (
               <FontAwesomeIcon
                 icon={faClipboard}
-                style={{ marginLeft: "5px" }}
+                className="img"
               />
             )}
           </li>
-          <li onClick={() => copy("Family20")}>
-            <span>Family20 - 20% discount for child clothes</span>
+          <li className="coupon" onClick={() => copy("Family20")}>
+            <p>
+              <span>Family20 </span>- 20% discount for family items
+            </p>
             {copiedCoupon === "Family20" ? (
               <FontAwesomeIcon
                 icon={faClipboardCheck}
-                color="green"
-                style={{ marginLeft: "5px" }}
+                className="img"
               />
             ) : (
               <FontAwesomeIcon
                 icon={faClipboard}
-                style={{ marginLeft: "5px" }}
+                className="img"
               />
             )}
           </li>
