@@ -42,6 +42,7 @@ function CartPage() {
 
   function submitOrder(e) {
     e.preventDefault();
+    const totalPrice = getCartTotal(coupons);
     if (validateForm()) {
       try {
         axios({
@@ -52,6 +53,7 @@ function CartPage() {
             email,
             phone,
             address,
+            totalPrice,
             orderProducts: cartProducts,
           },
         });

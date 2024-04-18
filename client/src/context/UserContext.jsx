@@ -9,6 +9,7 @@ export const UserProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("isLoggedIn")) || false
   );
 
+
   const [prevEmail, setPrevEmail] = useState(null);
 
   useEffect(() => {
@@ -73,6 +74,15 @@ export const UserProvider = ({ children }) => {
           ...state,
           hashedPassword: action.value,
         };
+        case "set_orders":
+        updateUser({
+          ...state,
+          orders: action.value,
+        });
+        return {
+          ...state,
+          orders: action.value,
+        };
       case "set_user": {
         updateUser({
           ...action.value,
@@ -96,6 +106,31 @@ export const UserProvider = ({ children }) => {
   );
 
   useEffect(() => {
+    if (isLoggedIn && user.email) {
+      fetchUserOrders();
+    }
+  }, [user.email]);
+
+  
+  async function fetchUserOrders() {
+    try {
+      const response = await axios.get("/api/userOrders", {
+        params: {
+          currentUser: user.email
+        },
+      });
+      console.log(response.data)
+      response.data && dispatchUser({
+        type: "set_user",
+        value: { ...user, orders: response.data },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+
+  useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
@@ -107,7 +142,6 @@ export const UserProvider = ({ children }) => {
           .then((response) => {
             const data = response.data;
             if (data.status === "ok") {
-              // console.log("User info updated successfully: ");
               resolve(true);
             } else {
               alert("Error: " + data.error);
@@ -132,6 +166,7 @@ export const UserProvider = ({ children }) => {
         user,
         dispatchUser,
         setPrevEmail,
+        fetchUserOrders
       }}
     >
       {children}

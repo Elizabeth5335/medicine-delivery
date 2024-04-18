@@ -62,15 +62,39 @@ app.get("/api/products", async (req, res) => {
 const Order = require("./models/Order");
 
 app.post("/api/order", (req, res) => {
-  const { name, email, phone, address, orderProducts } = req.body;
+  const { name, email, phone, address, totalPrice, orderProducts } = req.body;
   Order.create({
     name,
     email,
     phone,
     address,
+    totalPrice,
     orderProducts,
   });
 });
+
+app.get("/api/userOrders", async (req, res) => {
+  try {
+    const { currentUser } = req.query;
+
+    const orders = await Order.find({email: currentUser}).populate({
+      path: "orderProducts",
+      populate: {
+        path: "product",
+      },
+    });
+
+    if (!orders) {
+      return res.status(404).json({ message: "Orders not found" });
+    }
+
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server Error");
+  }
+});
+
 
 const User = require("./models/User"); //sign up
 

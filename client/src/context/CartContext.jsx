@@ -7,51 +7,52 @@ export const CartProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("cartProducts")) || []
   );
 
-  function addToCart(product) {
+  function addToCart(productToAdd) {
     const isProductInCart = cartProducts.find(
-      (cartProduct) => cartProduct._id === product._id
+      (cartProduct) => cartProduct._id === productToAdd._id
     );
 
     if (isProductInCart) {
       const updatedCartProducts = cartProducts.map((cartProduct) =>
-        cartProduct.id === product.id
-          ? { ...cartProduct, quantity: cartProduct.quantity + 1 }
+        cartProduct._id === productToAdd._id
+          // ? { ...cartProduct, quantity: cartProduct.quantity + 1 }
+          ? { ...cartProduct, product: cartProduct._id, quantity: cartProduct.quantity + 1 }
           : cartProduct
       );
       setCartProducts(updatedCartProducts);
     } else {
-      setCartProducts([...cartProducts, { ...product, quantity: 1 }]);
+      setCartProducts([...cartProducts, {...productToAdd, product: productToAdd._id, quantity: 1 }]);
     }
   }
 
-  function removeFromCart(product) {
+  function removeFromCart(productToRemove) {
     const isProductInCart = cartProducts.find(
-      (cartProduct) => cartProduct._id === product._id
+      (cartProduct) => cartProduct.product === productToRemove.product
     );
 
     if (isProductInCart) {
       const updatedCartProducts = cartProducts.filter(
-        (cartProduct) => cartProduct._id !== product._id
+        (cartProduct) => cartProduct.product !== productToRemove.product
       );
       setCartProducts(updatedCartProducts);
     }
   }
 
-  function setQuantity(product, newQuantity) {
+  function setQuantity(productToUpdate, newQuantity) {
     const isProductInCart = cartProducts.find(
-      (cartProduct) => cartProduct._id === product._id
+      (cartProduct) => cartProduct.product === productToUpdate.product
     );
 
     if (isProductInCart && newQuantity > 0 && newQuantity < 100) {
       const updatedCartProducts = cartProducts.map((cartProduct) =>
-        cartProduct._id === product._id
+        cartProduct.product === productToUpdate.product
           ? { ...cartProduct, quantity: newQuantity }
           : cartProduct
       );
       setCartProducts(updatedCartProducts);
     }
 
-    if (newQuantity === 0) removeFromCart(product);
+    if (newQuantity === 0) removeFromCart(productToUpdate);
   }
 
   function clearCart() {
