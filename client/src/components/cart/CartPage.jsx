@@ -4,46 +4,34 @@ import "../../CartPage.css";
 import { Link } from "react-router-dom";
 import { CartContext } from "../../context/CartContext";
 import axios from "axios";
+import { UserContext } from "../../context/UserContext";
+
+import   { validateForm} from '../common/Helpers'
 
 function CartPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [coupons, setCoupons] = useState("");
+
   const [formErrors, setFormErrors] = useState({});
 
+
+  const { user } = useContext(UserContext);
+
+
+  const [name, setName] = useState(user.name || "");
+  const [email, setEmail] = useState(user.email || "");
+  const [phone, setPhone] = useState(user.phone || "");
+  const [address, setAddress] = useState(user.address || "");
+  const [coupons, setCoupons] = useState("");
+
+  
   const { cartProducts, getCartTotal, clearCart, checkCoupon } =
     useContext(CartContext);
-
-  function validateForm() {
-    const errors = {};
-    if (!name.trim()) {
-      errors.name = "Name is required";
-    }
-    if (!email.trim()) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Email is invalid";
-    }
-    if (!phone.trim()) {
-      errors.phone = "Phone number is required";
-    } else if (
-      !/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone)
-    ) {
-      errors.phone = "Phone number is invalid";
-    }
-    if (!address.trim()) {
-      errors.address = "Address is required";
-    }
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
 
   function submitOrder(e) {
     e.preventDefault();
     const totalPrice = getCartTotal(coupons);
-    if (validateForm()) {
+    const errors = validateForm({name, email, phone, address});
+    setFormErrors(errors);
+    if (Object.keys(errors).length === 0) {
       try {
         axios({
           method: "post",
@@ -84,6 +72,8 @@ function CartPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Full name"
                 id="name"
+                minlength="2"
+                  maxlength="30"
                 required
               />
               {formErrors.name && (
@@ -100,6 +90,8 @@ function CartPage() {
                 placeholder="Email"
                 id="email"
                 type="email"
+                minlength="2"
+                  maxlength="30"
                 required
               />
               {formErrors.email && (
@@ -115,6 +107,8 @@ function CartPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone number"
                 id="phone"
+                minlength="2"
+                  maxlength="30"
                 required
                 type="phone"
               />
@@ -131,6 +125,8 @@ function CartPage() {
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Address"
                 id="address"
+                minlength="2"
+                  maxlength="50"
                 required
               />
               {formErrors.address && (
@@ -146,6 +142,8 @@ function CartPage() {
                 onChange={(e) => setCoupons(e.target.value)}
                 placeholder="Coupons"
                 id="coupons"
+                minlength="2"
+                  maxlength="20"
               />
               {coupons && checkCoupon(coupons) && (
                 <span className="error">{checkCoupon(coupons)}</span>
