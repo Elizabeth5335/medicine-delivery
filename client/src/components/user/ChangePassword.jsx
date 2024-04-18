@@ -80,13 +80,12 @@ export default function ChangePassword(props) {
   return (
     <div>
       <form className="change-password-container" onSubmit={checkNewPassword}>
-        <strong className="change-password-label">Change password:</strong>
+        <h3 className="change-password-label">Change password:</h3>
 
         {!pswCorrect ? (
           <>
-            <p>Enter old password</p>
-            <div>
-                
+            <p>Enter previous password</p>
+            <div className="change-password">
               <div className="input-group">
                 <input
                   className="user-info-input"
@@ -116,8 +115,8 @@ export default function ChangePassword(props) {
           </>
         ) : (
           <>
-            <div className="new-password-fields">
-              <div>Enter new password</div>
+            <div className="new-password-fields change-password">
+              <p>Enter new password</p>
               <div className="input-group">
                 <input
                   className="user-info-input"
@@ -140,7 +139,7 @@ export default function ChangePassword(props) {
                 <span className="error">{formErrors.newPassword}</span>
               )}
 
-              <div>Repeat new password</div>
+              <p>Repeat new password</p>
               <div className="input-group">
                 <input
                   className="user-info-input"

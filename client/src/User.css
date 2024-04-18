@@ -139,3 +139,36 @@
     }
   }
 }
+
+
+.logout{
+  margin-top: 3rem;
+}
+.logout-button{
+  margin-bottom: 3rem;
+  font-weight: bold;
+  background-color: transparent;
+  border: 2px solid red;
+  color: red;
+}
+
+.logout-button:hover{
+  background-color: red;
+  color: #fff;
+}
+
+
+.change-password{
+  margin-bottom: 1rem;
+  
+  p{
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+  }
+  .input-group{
+    min-width: 50%;
+    margin-right: 2rem;
+  }
+  
+
+}

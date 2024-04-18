@@ -26,6 +26,7 @@ export default function UserInfo() {
 
   return (
     <div id="user-info">
+      <h3 className="">Contact info:</h3>
       {arr.map((item) => {
         return isEditing !== item ? (
           <div
@@ -78,7 +79,9 @@ export default function UserInfo() {
       })}
 
       <ChangePassword />
+      <h3 className="logout">Log out:</h3>
       <button
+      className="logout-button"
         onClick={() => {
           setIsLoggedIn(false);
           localStorage.setItem(
