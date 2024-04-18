@@ -1,10 +1,5 @@
 import { useContext, useState } from "react";
 import MedItemCart from "./MedItemCart";
-import linex from "../../assets/images/linex.jpg"
-import paracetamol from "../../assets/images/paracetamol.jpg"
-import nospa from "../../assets/images/nospa.jpg"
-import fervex from "../../assets/images/fervex.jpg"
-import nurofen from "../../assets/images/nurofen.jpg"
 import { CartContext } from "../../context/CartContext";
 
 

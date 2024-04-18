@@ -29,13 +29,12 @@ function MedItemCart(props) {
             name="quantity"
             value={quantity}
             onInput={(e) => {
-              setQuantity;
               setQuantity(product, e.target.value);
             }}
             placeholder={product.quantity}
             id="quantity"
             type="number"
-            min={0}
+            min={1}
             max={100}
             required
           />

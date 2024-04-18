@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar";
 import SortButtons from "./SortButtons";
 import axios from "axios";
 
-function MedItemsList(props) {
+export default function MedItemsList(props) {
   const { currentShop, isSorted, sortByDate, sortByPrice } = props;
   const { addToCart } = useContext(CartContext);
 
@@ -128,4 +128,3 @@ function MedItemsList(props) {
   );
 }
 
-export default MedItemsList;

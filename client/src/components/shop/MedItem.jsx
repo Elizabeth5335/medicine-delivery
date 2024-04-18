@@ -1,15 +1,28 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCartPlus, faHeart as heartSolid } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCartPlus,
+  faCheck,
+  faHeart as heartSolid,
+} from "@fortawesome/free-solid-svg-icons";
 import { faHeart as heartRegular } from "@fortawesome/free-regular-svg-icons";
 
-function MedItem(props) {
+export default function MedItem(props) {
+  const [cartIcon, setCartIcon] = useState(faCartPlus);
+
   const {
     item: { _id, name, image, price, added },
     addToCart,
     isFavourite,
-    toggleIsFavourite
+    toggleIsFavourite,
   } = props;
+
+  function changeIcon() {
+    const timeoutId = setTimeout(() => {
+      setCartIcon(faCartPlus);
+    }, 1000);
+    return () => clearTimeout(timeoutId);
+  }
 
   return (
     <div className="med-item">
@@ -18,22 +31,25 @@ function MedItem(props) {
       <div className="med-item-footer">
         <span className="price">{price?.toFixed(2)}</span>
         <div className="icon heart" onClick={toggleIsFavourite}>
-        {isFavourite ? (
-          <FontAwesomeIcon icon={heartSolid} color="red" />
-        ) : (
-          <FontAwesomeIcon icon={heartRegular} />
-        )}
+          {isFavourite ? (
+            <FontAwesomeIcon icon={heartSolid} color="red" />
+          ) : (
+            <FontAwesomeIcon icon={heartRegular} />
+          )}
         </div>
-        <div className="icon med-item-btn" onClick={addToCart}>
-        <FontAwesomeIcon icon={faCartPlus} />
+        <div
+          className="icon med-item-btn"
+          onClick={() => {
+            setCartIcon(faCheck);
+            changeIcon();
+            addToCart();
+            
+          }}
+          // onClick={addToCart}
+        >
+          <FontAwesomeIcon icon={cartIcon} />
         </div>
-        {/* <button className="med-item-btn" onClick={addToCart}>
-          Add to cart
-    
-        </button> */}
       </div>
     </div>
   );
 }
-
-export default MedItem;

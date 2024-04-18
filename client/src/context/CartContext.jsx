@@ -16,7 +16,7 @@ export const CartProvider = ({ children }) => {
       const updatedCartProducts = cartProducts.map((cartProduct) =>
         cartProduct._id === productToAdd._id
           // ? { ...cartProduct, quantity: cartProduct.quantity + 1 }
-          ? { ...cartProduct, product: cartProduct._id, quantity: cartProduct.quantity + 1 }
+          ? { ...cartProduct, product: cartProduct._id, quantity: +cartProduct.quantity + 1 }
           : cartProduct
       );
       setCartProducts(updatedCartProducts);
@@ -43,7 +43,7 @@ export const CartProvider = ({ children }) => {
       (cartProduct) => cartProduct.product === productToUpdate.product
     );
 
-    if (isProductInCart && newQuantity > 0 && newQuantity < 100) {
+    if (isProductInCart && newQuantity >= 0 && newQuantity < 100) {
       const updatedCartProducts = cartProducts.map((cartProduct) =>
         cartProduct.product === productToUpdate.product
           ? { ...cartProduct, quantity: newQuantity }

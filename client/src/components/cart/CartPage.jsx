@@ -49,7 +49,8 @@ function CartPage() {
     const totalPrice = getCartTotal(coupons);
     const errors = validateForm({ name, email, phone, address });
     setFormErrors(errors);
-    if (Object.keys(errors).length === 0) {
+    if(totalPrice <= 0) alert("Total price should be at least 1$")
+    if (Object.keys(errors).length === 0 && totalPrice > 0) {
       try {
         axios({
           method: "post",
