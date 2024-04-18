@@ -1,13 +1,15 @@
 .signup {
-  
   input{
     padding-right: 20px;
     /* width: -webkit-fill-available; */
     width: 100%;
   }
-  
-  
+
+  margin: auto;
+  min-width: 500px;
 }
+
+
 
 
 input:not([type="checkbox"], [type="number"]) {  
@@ -23,4 +25,12 @@ input:not([type="checkbox"], [type="number"]) {
   position: absolute;
   right: 0;
   top: 20%;
+}
+
+
+@media screen and (max-width: 764px) {
+  .signup{
+    min-width: 100%;
+    /* width: 100%; */
+  }
 }
