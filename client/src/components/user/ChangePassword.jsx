@@ -6,7 +6,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../context/UserContext";
 
 export default function ChangePassword(props) {
-  const { user } = useContext(UserContext);
+  const { user, dispatchUser } = useContext(UserContext);
   const [password, setPassword] = useState("");
   const [pswCorrect, setPswCorrect] = useState(false);
   const [newPassword, setNewPassword] = useState("");
@@ -69,11 +69,17 @@ export default function ChangePassword(props) {
       return;
     }
 
+    dispatchUser({
+      type: "set_password",
+      value: newPassword,
+    });
+
     setNewPassword("");
     setRepeatPassword("");
     setPassword("");
     setFormErrors({});
     setPswCorrect(false);
+
     alert("Password changed successfully");
   }
 

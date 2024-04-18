@@ -79,13 +79,16 @@ export const UserProvider = ({ children }) => {
           address: action.value,
         };
       case "set_password":
+        const salt = bcrypt.genSaltSync(10);
+
+        const hashedPassword = bcrypt.hashSync(action.value, salt);
         updateUser({
           ...state,
-          hashedPassword: action.value,
+          hashedPassword: hashedPassword,
         });
         return {
           ...state,
-          hashedPassword: action.value,
+          hashedPassword: hashedPassword,
         };
       case "set_orders":
         updateUser({
@@ -157,7 +160,6 @@ export const UserProvider = ({ children }) => {
     });
   }
 
-
   function signup(
     e,
     name,
@@ -193,7 +195,10 @@ export const UserProvider = ({ children }) => {
           .then((response) => {
             const data = response.data;
             if (data.status === "ok") {
-              dispatchUser({ type: "set_user", value: {name, email, phone, address, password} });
+              dispatchUser({
+                type: "set_user",
+                value: { name, email, phone, address, password },
+              });
               isAccountCreated = true;
               setIsLoggedIn(true);
               return alert("Account created!");
@@ -205,7 +210,7 @@ export const UserProvider = ({ children }) => {
             alert("Error: " + error.message);
           })
           .then(() => {
-            if ((isAccountCreated === true)) {
+            if (isAccountCreated === true) {
               setName("");
               setEmail("");
               setPhone("");
