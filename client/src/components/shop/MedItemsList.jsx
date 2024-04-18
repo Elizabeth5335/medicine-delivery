@@ -57,7 +57,6 @@ function MedItemsList(props) {
         ...products.filter((product) => !favProducts.includes(product._id)),
       ];
       setDisplayedProducts(sortedProducts);
-      console.log(displayedProducts)
 
     }
   }

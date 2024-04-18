@@ -4,9 +4,6 @@ import "../../Orders.css";
 
 export default function Orders() {
   const { user, fetchUserOrders } = useContext(UserContext);
-  // fetchUserOrders();
-  console.log("user.orders");
-  console.log(user.orders);
   const orders = user.orders;
   return (
     <div className="orders">

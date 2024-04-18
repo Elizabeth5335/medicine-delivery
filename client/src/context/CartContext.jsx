@@ -68,7 +68,6 @@ export const CartProvider = ({ children }) => {
     if (validCoupons.hasOwnProperty(coupon)) {
       return "";
     } else {
-      console.warn("Invalid coupon code");
       return "Invalid coupon code";
     }
   }

@@ -14,7 +14,7 @@ export default function Signup() {
   const [formErrors, setFormErrors] = useState({});
   const { isLoggedIn, setIsLoggedIn, user, dispatchUser } = useContext(UserContext);
 
-  function validateForm() {
+  function validatePassword() {
     const errors = {};
     if (!email.trim()) {
       errors.email = "Email is required";
@@ -32,7 +32,7 @@ export default function Signup() {
   function login(e) {
     e.preventDefault();
 
-    if (validateForm()) {
+    if (validatePassword()) {
       try {
         axios
           .post("api/login", {
@@ -41,7 +41,6 @@ export default function Signup() {
           })
           .then((response) => {
             const data = response.data;
-            console.log(data);
             if (data.status === "ok") {
               setEmail("");
               setPassword("");

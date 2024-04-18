@@ -145,3 +145,9 @@
 .cart-list::-webkit-scrollbar-thumb:hover {
   background: #0d4c13; 
 }
+
+
+.checkbox-cart{
+  display: flex;
+  align-items: baseline;
+}

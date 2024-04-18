@@ -7,9 +7,7 @@ import { validateForm } from "../common/Helpers";
 import ChangePassword from "./ChangePassword";
 
 export default function UserInfo() {
-  const [formErrors, setFormErrors] = useState({});
-  console.log("error-----------");
-  console.log(formErrors);
+  const [formErrors, setFormErrors] = useState("");
 
   const { user, setIsLoggedIn, dispatchUser, setPrevEmail } =
     useContext(UserContext);
@@ -49,8 +47,8 @@ export default function UserInfo() {
                 <input
                   className="user-info-input"
                   defaultValue={user[item]}
-                  minlength="2"
-                  maxlength="90"
+                  minLength="2"
+                  maxLength="90"
                   onInput={(e) => {
                     if (item === "email") {
                       setPrevEmail(user[item]);

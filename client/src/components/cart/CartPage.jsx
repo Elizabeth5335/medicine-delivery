@@ -6,30 +6,48 @@ import { CartContext } from "../../context/CartContext";
 import axios from "axios";
 import { UserContext } from "../../context/UserContext";
 
-import   { validateForm} from '../common/Helpers'
+import { validateForm } from "../common/Helpers";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 function CartPage() {
-
   const [formErrors, setFormErrors] = useState({});
 
-
-  const { user } = useContext(UserContext);
-
+  const { user, isLoggedIn, signup } = useContext(UserContext);
 
   const [name, setName] = useState(user.name || "");
   const [email, setEmail] = useState(user.email || "");
   const [phone, setPhone] = useState(user.phone || "");
   const [address, setAddress] = useState(user.address || "");
   const [coupons, setCoupons] = useState("");
+  const [createAcc, setCreateAcc] = useState(false);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  
   const { cartProducts, getCartTotal, clearCart, checkCoupon } =
     useContext(CartContext);
 
   function submitOrder(e) {
     e.preventDefault();
+    if (createAcc) {
+      signup(
+        e,
+        name,
+        email,
+        phone,
+        address,
+        password,
+        setName,
+        setEmail,
+        setPhone,
+        setAddress,
+        setPassword,
+        setFormErrors
+      );
+    }
     const totalPrice = getCartTotal(coupons);
-    const errors = validateForm({name, email, phone, address});
+    const errors = validateForm({ name, email, phone, address });
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       try {
@@ -72,8 +90,8 @@ function CartPage() {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Full name"
                 id="name"
-                minlength="2"
-                  maxlength="30"
+                minLength="2"
+                maxLength="30"
                 required
               />
               {formErrors.name && (
@@ -90,8 +108,8 @@ function CartPage() {
                 placeholder="Email"
                 id="email"
                 type="email"
-                minlength="2"
-                  maxlength="30"
+                minLength="2"
+                maxLength="30"
                 required
               />
               {formErrors.email && (
@@ -107,8 +125,8 @@ function CartPage() {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Phone number"
                 id="phone"
-                minlength="2"
-                  maxlength="30"
+                minLength="2"
+                maxLength="30"
                 required
                 type="phone"
               />
@@ -125,8 +143,8 @@ function CartPage() {
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="Address"
                 id="address"
-                minlength="2"
-                  maxlength="50"
+                minLength="2"
+                maxLength="50"
                 required
               />
               {formErrors.address && (
@@ -142,13 +160,57 @@ function CartPage() {
                 onChange={(e) => setCoupons(e.target.value)}
                 placeholder="Coupons"
                 id="coupons"
-                minlength="2"
-                  maxlength="20"
+                minLength="2"
+                maxLength="20"
               />
               {coupons && checkCoupon(coupons) && (
                 <span className="error">{checkCoupon(coupons)}</span>
               )}
             </label>
+
+            {!isLoggedIn && (
+              <div className="checkbox-cart">
+                <input
+                  name="createAcc"
+                  checked={createAcc}
+                  onChange={(e) => setCreateAcc(e.target.checked)}
+                  id="createAcc"
+                  type="checkbox"
+                  style={{ marginRight: "8px" }}
+                />
+                <label htmlFor="createAcc">Create account</label>
+              </div>
+            )}
+
+            {createAcc && (
+              <label>
+                Password:
+                <div className="input-group">
+                  <input
+                    name="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                  />
+
+                  <div className="input-group-append">
+                    <span className="input-group-text">
+                      <FontAwesomeIcon
+                        icon={showPassword ? faEyeSlash : faEye}
+                        color="grey"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                      />
+                    </span>
+                  </div>
+                </div>
+                {formErrors.password && (
+                  <span className="error">{formErrors.password}</span>
+                )}
+              </label>
+            )}
 
             <button type="submit">Submit</button>
             <div className="cart-footer">

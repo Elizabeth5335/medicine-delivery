@@ -1,11 +1,8 @@
 import React from "react";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import "../../Signup.css";
-import bcrypt from "bcryptjs";
 import { UserContext } from "../../context/UserContext";
 
 export default function Signup() {
@@ -16,85 +13,30 @@ export default function Signup() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const { setIsLoggedIn, dispatchUser } = useContext(UserContext);
+  const { signup } = useContext(UserContext);
 
-  const salt = bcrypt.genSaltSync(10);
-  function validateForm() {
-    const errors = {};
-    if (!name.trim()) {
-      errors.name = "Name is required";
-    }
-    if (!email.trim()) {
-      errors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-      errors.email = "Email is invalid";
-    }
-    if (!phone.trim()) {
-      errors.phone = "Phone number is required";
-    } else if (
-      !/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/.test(phone)
-    ) {
-      errors.phone = "Phone number is invalid";
-    }
-    if (!address.trim()) {
-      errors.address = "Address is required";
-    }
-    if (!password.trim()) {
-      //add validation
-      errors.password = "Password is required";
-    }
 
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
-  }
-
-  function login(e) {
-    e.preventDefault();
-    const hashedPassword = bcrypt.hashSync(password, salt);
-
-    if (validateForm()) {
-      try {
-        axios
-          .post("/api/users", {
+  return (
+    <div className="signup">
+      <form
+        id="cart-form"
+        onSubmit={(e) => {
+          signup(
+            e,
             name,
             email,
             phone,
             address,
-            hashedPassword,
-          })
-          .then((response) => {
-            const data = response.data;
-            console.log(data);
-            if (data.status === "ok") {
-              dispatchUser({type: "set_name", value: name})
-              setName("");
-              dispatchUser({type: "set_name", value: email})
-              setEmail("");
-              dispatchUser({type: "set_name", value: phone})
-              setPhone("");
-              dispatchUser({type: "set_name", value: address})
-              setAddress("");
-              dispatchUser({type: "set_name", value: password})
-              setPassword("");
-              setIsLoggedIn(true);
-              window.location.replace("/account");
-              return alert("Account created!");
-            } else {
-              alert("Error: " + data.error);
-            }
-          })
-          .catch((error) => {
-            alert("Error: " + error.message);
-          });
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
-    }
-  }
-
-  return (
-    <div className="signup">
-      <form id="cart-form" onSubmit={login}>
+            password,
+            setName,
+            setEmail,
+            setPhone,
+            setAddress,
+            setPassword,
+            setFormErrors
+          );
+        }}
+      >
         <label>
           Email:
           <input

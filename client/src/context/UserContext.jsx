@@ -1,20 +1,33 @@
 import axios from "axios";
 import { createContext, useState, useEffect, useReducer } from "react";
+import bcrypt from "bcryptjs";
+
+import { validateForm } from "../components/common/Helpers";
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  
   const [isLoggedIn, setIsLoggedIn] = useState(
     JSON.parse(localStorage.getItem("isLoggedIn")) || false
   );
-
 
   const [prevEmail, setPrevEmail] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("isLoggedIn", JSON.stringify(isLoggedIn));
   }, [isLoggedIn]);
+
+  const [user, dispatchUser] = useReducer(
+    reducer,
+    JSON.parse(localStorage.getItem("user")) || {
+      name: "",
+      email: "",
+      phone: "",
+      address: "",
+      hashedPassword: "",
+      orders: [],
+    }
+  );
 
   function reducer(state, action) {
     switch (action.type) {
@@ -74,7 +87,7 @@ export const UserProvider = ({ children }) => {
           ...state,
           hashedPassword: action.value,
         };
-        case "set_orders":
+      case "set_orders":
         updateUser({
           ...state,
           orders: action.value,
@@ -93,42 +106,28 @@ export const UserProvider = ({ children }) => {
     throw Error("Unknown action.");
   }
 
-  const [user, dispatchUser] = useReducer(
-    reducer,
-    JSON.parse(localStorage.getItem("user")) || {
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-      hashedPassword: "",
-      orders: [],
-    }
-  );
-
   useEffect(() => {
     if (isLoggedIn && user.email) {
       fetchUserOrders();
     }
   }, [user.email]);
 
-  
   async function fetchUserOrders() {
     try {
       const response = await axios.get("/api/userOrders", {
         params: {
-          currentUser: user.email
+          currentUser: user.email,
         },
       });
-      console.log(response.data)
-      response.data && dispatchUser({
-        type: "set_user",
-        value: { ...user, orders: response.data },
-      });
+      response.data &&
+        dispatchUser({
+          type: "set_user",
+          value: { ...user, orders: response.data },
+        });
     } catch (error) {
       console.error(error);
     }
   }
-
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
@@ -158,6 +157,69 @@ export const UserProvider = ({ children }) => {
     });
   }
 
+
+  function signup(
+    e,
+    name,
+    email,
+    phone,
+    address,
+    password,
+    setName,
+    setEmail,
+    setPhone,
+    setAddress,
+    setPassword,
+    setFormErrors
+  ) {
+    e.preventDefault();
+    const salt = bcrypt.genSaltSync(10);
+
+    const hashedPassword = bcrypt.hashSync(password, salt);
+    let isAccountCreated = false;
+    const errors = validateForm({ name, email, phone, address });
+    setFormErrors(errors);
+
+    if (Object.keys(errors).length === 0) {
+      try {
+        axios
+          .post("/api/users", {
+            name,
+            email,
+            phone,
+            address,
+            hashedPassword,
+          })
+          .then((response) => {
+            const data = response.data;
+            if (data.status === "ok") {
+              dispatchUser({ type: "set_user", value: {name, email, phone, address, password} });
+              isAccountCreated = true;
+              setIsLoggedIn(true);
+              return alert("Account created!");
+            } else {
+              alert("Error: " + data.error);
+            }
+          })
+          .catch((error) => {
+            alert("Error: " + error.message);
+          })
+          .then(() => {
+            if ((isAccountCreated === true)) {
+              setName("");
+              setEmail("");
+              setPhone("");
+              setAddress("");
+              setPassword("");
+              window.location.replace("/account");
+            }
+          });
+      } catch (error) {
+        alert("Error: " + error.message);
+      }
+    }
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -166,7 +228,8 @@ export const UserProvider = ({ children }) => {
         user,
         dispatchUser,
         setPrevEmail,
-        fetchUserOrders
+        fetchUserOrders,
+        signup,
       }}
     >
       {children}
